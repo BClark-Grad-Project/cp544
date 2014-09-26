@@ -13,9 +13,10 @@
     <string name="i_tri">An Isoseceles has 2 equal sides.</string>
     <string name="t_tri">Types Of Triangles</string>
     <string name="enter_text">Please enter three sides of the triangle below (whole number only): </string>
-    <string name="side_1">Side One: </string>
-    <string name="side_2">Side Two:</string>
-    <string name="side_3">Side Three: </string>
+    <string name="editText1">Value One</string>
+    <string name="side_1">Bottom Side: </string>
+    <string name="side_2">Left Side:</string>
+    <string name="side_3">Right Side: </string>
     <string name="title_activity_guide">Guide</string>
     <string name="guide_guide">Tri angle Types:</string>
     <string name="title_activity_game">Game</string>
@@ -27,5 +28,10 @@
     <string name="member2">Hooman Majidzadeh Rezvani</string>
     <string name="member3">Christie Phan</string>
     <string name="member4">Panktiben Soni</string>
+    <string name="type_hint">Type a number</string>
+    <string name="generate">Generate</string>
+    <string name="clear">Clear</string>
+    <string name="you_enter">You Entered: </string>
+    <string name="display">Display</string>
      
 </resources>
