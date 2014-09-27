@@ -1,5 +1,6 @@
 package com.cp544.teamone.triangle;
 
+import java.io.Console;
 import java.util.Locale;
 import android.app.Activity;
 import android.app.ActionBar;
@@ -35,7 +36,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 * {@link android.support.v13.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
-	//public Triangle triangle;
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
@@ -149,7 +149,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			// Show 3 total pages.
 			return 3;
 		}
-
+		
+		public void invalidInput() {
+			display = (TextView) findViewById(R.id.textView5);
+			idisplay = (ImageView) findViewById(R.id.display);
+			display.setText("Error:Please try again, remember your number must be less than 100");
+			idisplay.setImageResource(android.R.color.transparent);
+		}	
+		
 		public ActionBar.TabListener getListener(int position) {
 			return new ActionBar.TabListener() {
 				public void onTabSelected(ActionBar.Tab tab,
@@ -171,24 +178,17 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 						gen.setOnClickListener(new View.OnClickListener() {
 
 							@Override
-							public void onClick(View v) {
-
+							public void onClick(View v) {								 
 								// getting the text and converting it to string value
 								input1a = input1.getText().toString();
 								input2b = input2.getText().toString();
 								input3c = input3.getText().toString();
-								if(input1.toString() == null){input1.setText(0);}
-								if(input2.toString() == null){input2.setText(0);}
-								if(input3.toString() == null){input3.setText(0);}
+								
 								// converting those text values back into int
 								a = Integer.parseInt(input1a);
 								b = Integer.parseInt(input2b);
 								c = Integer.parseInt(input3c);
-								
-								//public Triangle triangle;
-								//triangle = new Triangle(idisplay.getContext(), a, b , c);
-								//idisplay.setBackground(triangle.getDrawable());
-								
+				
 								// setting images
 								if (((a == b && b != c) || (a == c && b != c) || (b == c && a != c))
 										&& (a <= 100 && b <= 100 && c <= 100)) {
@@ -203,10 +203,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 									display.setText("Scalene Triangle: No Congruent Sides");
 									idisplay.setImageResource(R.drawable.s_triangle);
 								} else {
-									display.setText("Error:Please try again, remember your number must be less than 100");
-
+									invalidInput();
 								}
-
 							}
 						});
 
@@ -217,9 +215,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 							@Override
 							public void onClick(View v) {
 								// TODO Auto-generated method stub
-								if (v.getId() == R.id.button2)
-									;
-								{
+								if (v.getId() == R.id.button2) {
 									input1.setText("");
 									input2.setText("");
 									input3.setText("");
@@ -296,40 +292,4 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			return rootView;
 		}
 	}
-
-	public class Triangle extends ImageView{
-        Paint paint = new Paint();
-        Path path = new Path();
-        
-        Point a = new Point(0, 0);
-        Point b = new Point(0, 100);
-        Point c = new Point(87, 50);
-            
-        public Triangle(Context context, int x, int y, int z) {
-            super(context);
-            
-            // TODO Do math and set points.
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            super.onDraw(canvas);
-
-            paint.setColor(android.graphics.Color.BLACK);
-            canvas.drawPaint(paint);
-
-            paint.setStrokeWidth(4);
-            paint.setColor(android.graphics.Color.RED);
-            paint.setStyle(Paint.Style.FILL_AND_STROKE);
-            paint.setAntiAlias(true);
-                        
-            path.setFillType(FillType.EVEN_ODD);
-            path.lineTo(b.x, b.y);
-            path.lineTo(c.x, c.y);
-            path.lineTo(a.x, a.y);
-            path.close();
-
-            canvas.drawPath(path, paint);
-        }
-    }
 }
