@@ -2,7 +2,6 @@ package com.cp544.teamone.triangle;
 
 import java.util.Locale;
 
-import android.R.bool;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -77,7 +76,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(mSectionsPagerAdapter.getListener(i)));
 		}
+		
+		//runUnitTest();
+	}
 
+	public void runUnitTest() {
 		TextView displayName;
 		ImageView displayImage;
 		displayName = (TextView) findViewById(R.id.textView6);
@@ -88,7 +91,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		unitTest.testEquilateral();
 		unitTest.testScalene();
 	}
-
+		
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
