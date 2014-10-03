@@ -87,9 +87,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		displayImage = (ImageView) findViewById(R.id.display);
 		
 		unitTest = new UnitTestGameGenerateTriangle(displayName, displayImage);
-		unitTest.testIsoselese();
-		unitTest.testEquilateral();
-		unitTest.testScalene();
+
 	}
 		
 	@Override
@@ -134,14 +132,19 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	}
 
 	public class Game {
-		int bottomLength, leftLength, rightLength;
+		double minVal = 0;
+		double maxVal = 100;
+		double bottomLength, leftLength, rightLength;
 		Button btnGenerate, btnClear;
 		EditText inputBottom, inputLeft, inputRight;
 		TextView disaplyTriangleName, labelResults;
 		ImageView displayTriangleImage;
 		
-		public void invalidInput(TextView tView, ImageView iView) {
-			tView.setText("Error:Please try again, remember your number must be less than 100");
+		public void invalidInput(TextView tView, ImageView iView, int type) {
+			if (type == 0) tView.setText("Error:Please try again, remember your number must be less than " + maxVal + ".");
+			if (type == 1) tView.setText("Error:Please try again, value must be more than " + minVal + ".");
+			if (type == 2) tView.setText("Error:Please try again, missing input field.");
+			if (type == 3) tView.setText("Error:Please try again, this doesn't equal a triangle.");
 			iView.setImageResource(android.R.color.transparent);
 			//Log.d("Triangle Generate", "Clear fields. Sucess!");
 		}
@@ -174,30 +177,53 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			}
 		}
 		
-		public int gameGenerateTriangle(TextView tView, ImageView iView, int a, int b, int c) {				
-			if (((a == b && b != c) || (a == c && b != c) || (b == c && a != c))
-					&& (a <= 100 && b <= 100 && c <= 100)) {
-				viewIsosceles(tView, iView);
-				return 2;
-			} else if ((a == b && a == c)
-					&& (a <= 100 && b <= 100 && c <= 100)) {
-				viewEquilateral(tView, iView);
-				return 1;
-			} else if ((a != b && a != c && b != c)
-					&& (a <= 100 && b <= 100 && c <= 100)) {
-				viewScalene(tView, iView);
-				return 3;
-			} else {
-				invalidInput(tView, iView);
+	    public boolean isLarge(double a, double b, double c) {
+	        return a >= maxVal || b >= maxVal || c >= maxVal;
+	    }
+		
+	    public boolean isShort(double a, double b, double c) {
+	        return a <= minVal || b <= minVal || c <= minVal;
+	    }
+
+	    public boolean notTriangle(double a, double b, double c) {
+	        return a > b + c || b > a + c || c > a + b;
+	    }
+	    
+		public Boolean isEqualateral (double a, double b, double c){
+			return  a == b && b == c;
+		}
+		
+		public Boolean isScalene (double a, double b, double c){
+			return a == b || b == c || c == a;
+		}
+		
+		public int gameGenerateTriangle(TextView tView, ImageView iView, double a, double b, double c) {				
+			if (isLarge(a,b,c)) {
+				invalidInput(tView, iView, 0);
 				return 0;
+			} else if (isShort(a,b,c)) {
+				invalidInput(tView, iView, 1);
+				return 1;
+			} else if (notTriangle(a,b,c)) {
+				invalidInput(tView, iView, 3);
+				return 2;
+			} else if (isEqualateral(a,b,c)) {
+				viewEquilateral(tView, iView);
+				return 3;
+			} else if (isScalene(a,b,c)) {
+				viewScalene(tView, iView);
+				return 4;
+			} else {
+				viewIsosceles(tView, iView);
+				return 5;
 			}
 		}
 		
 		public void gameLogic(TextView tView, ImageView iView, EditText eText1, EditText eText2, EditText eText3){				
 			// convert text to int
-			bottomLength = Integer.parseInt(eText1.getText().toString());
-			leftLength = Integer.parseInt(eText2.getText().toString());
-			rightLength = Integer.parseInt(eText3.getText().toString());
+			bottomLength = Double.parseDouble(eText1.getText().toString());
+			leftLength = Double.parseDouble(eText2.getText().toString());
+			rightLength = Double.parseDouble(eText3.getText().toString());
 
 			// Choose triangle. 
 			gameGenerateTriangle(tView, iView, bottomLength, leftLength, rightLength);			
@@ -345,6 +371,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		// Isoselese returns 1
 		// Equilateral returns 2
 		// Scalene returns 3
+		int value; 
 		Game game = new Game();
 		TextView tView;
 		ImageView iView;
@@ -359,140 +386,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		}
 		
 		public void testIsoselese(){
-			Log.d("(TI) Isoseles Boundry Test", "Begin");			
-			TIupper();
-			TIlower();
-			TIbelow();
-			TIabove();
-			TImiddle();
-			Log.d("(TI) Isoseles Boundry Test", "End");
-		}
-		public void testEquilateral(){
-			Log.d("(TE) Equilateral Boundry Test", "Begin");
-			TEupper();
-			TElower();
-			TEbelow();
-			TEabove();
-			TEmiddle();
-			Log.d("(TE) Equilateral Boundry Test", "End");
-		}
-		public void testScalene(){
-			Log.d("(TS) Scalene Boundry Test", "Begin");
-			TSupper();
-			TSlower();
-			TSbelow();
-			TSabove();
-			TSmiddle();
-			Log.d("(TS) Scalene Boundry Test", "End");
-		}
-		int value;
-		// (TI) Test Isoselese
-		public void TIupper(){
-			value = game.gameGenerateTriangle(tView, iView, upperLower.y, upperLower.y, upperLower.y);
-			if(value == 1){
-				Log.d("TI Upper Bounds", "Passed!");
-			} else {				
-				Log.e("TI Upper Bounds", "Did not pass.");
-			}
-		}
-		public void TIlower(){
-			value = game.gameGenerateTriangle(tView, iView, upperLower.x, upperLower.x, upperLower.x);
-			if(value == 1){
-				Log.d("TI Lower Bounds", "Passed!");
-			} else {				
-				Log.e("TI Lower Bounds", "Did not pass.");
-			}			
-		}
-		public void TIbelow(){
-			value = game.gameGenerateTriangle(tView, iView, belowAbove.x, belowAbove.x, belowAbove.x);
-			if(value == 0){
-				Log.d("TI Below Bounds", "Passed!");
-			} else {				
-				Log.e("TI Below Bounds", "Did not pass.");
-			}			
-		}
-		public void TIabove(){
-			value = game.gameGenerateTriangle(tView, iView, belowAbove.y, belowAbove.y, belowAbove.y);
-			if(value == 0){
-				Log.d("TI Above Bounds", "Passed!");
-			} else {				
-				Log.e("TI Above Bounds", "Did not pass.");
-			}			
-		}
-		public void TImiddle(){
-			value = game.gameGenerateTriangle(tView, iView, center, center, center);
-			if(value == 1){
-				Log.d("TI In Bounds", "Passed!");
-			} else {				
-				Log.e("TI In Bounds", "Did not pass.");
-			}			
-		}
-		
-		// (TE) Test Equilateral
-		public void TEupper(){
-			if(game.gameGenerateTriangle(tView, iView, upperLower.y, upperLower.y, center) == 2){
-				Log.d("TE Upper Bounds", "Passed!");
-			} else {				
-				Log.e("TE Upper Bounds", "Did not pass.");
-			}
-		}
-		public void TElower(){
-			if(game.gameGenerateTriangle(tView, iView, upperLower.x, upperLower.x, center) == 2){
-				Log.d("TE Lower Bounds", "Passed!");
-			} else {				
-				Log.e("TE Lower Bounds", "Did not pass.");
-			}			
-		}
-		public void TEbelow(){
-			if(game.gameGenerateTriangle(tView, iView, belowAbove.x, belowAbove.x, center) == 0){
-				Log.d("TE Below Bounds", "Passed!");
-			} else {				
-				Log.e("TE Below Bounds", "Did not pass.");
-			}			
-		}
-		public void TEabove(){
-			if(game.gameGenerateTriangle(tView, iView, belowAbove.y, belowAbove.y, center) == 0){
-				Log.d("TE Above Bounds", "Passed!");
-			} else {				
-				Log.e("TE Above Bounds", "Did not pass.");
-			}			
-		}
-		public void TEmiddle(){
-			if(game.gameGenerateTriangle(tView, iView, center + 25, center, center) == 2){
-				Log.d("TE In Bounds", "Passed!");
-			} else {				
-				Log.e("TE In Bounds", "Did not pass.");
-			}			
-		}
-
-		// (TS) Test Scalene
-		public void TSupper(){
-			if(game.gameGenerateTriangle(tView, iView, upperLower.y, center + 25, center) == 3){
-				Log.d("TS Upper Bounds", "Passed!");
-			} else {				
-				Log.e("TS Upper Bounds", "Did not pass.");
-			}
-		}
-		public void TSlower(){
-			if(game.gameGenerateTriangle(tView, iView, upperLower.x, center + 25, center) == 3){
-				Log.d("TS Lower Bounds", "Passed!");
-			} else {				
-				Log.e("TS Lower Bounds", "Did not pass.");
-			}			
-		}
-		public void TSbelow(){
-			if(game.gameGenerateTriangle(tView, iView, belowAbove.x, center + 25, center) == 0){
-				Log.d("TS Below Bounds", "Passed!");
-			} else {				
-				Log.e("TS Below Bounds", "Did not pass.");
-			}			
-		}
-		public void TSabove(){
-			if(game.gameGenerateTriangle(tView, iView, belowAbove.y, center + 25, center) == 0){
-				Log.d("TS Above Bounds", "Passed!");
-			} else {				
-				Log.e("TS Above Bounds", "Did not pass.");
-			}			
+			Log.d("Boundry Test", "Begin");	
+			Log.d("Boundry Test", "End");
 		}
 		public void TSmiddle(){
 			if(game.gameGenerateTriangle(tView, iView, center + 25, center - 25, center) == 3){
