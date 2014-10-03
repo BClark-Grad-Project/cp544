@@ -77,6 +77,7 @@ public final class R {
         public static final int e_tri=0x7f050007;
         public static final int editText1=0x7f05000c;
         public static final int enter_text=0x7f05000b;
+        public static final int exit=0x7f050020;
         public static final int game_btn=0x7f050014;
         public static final int generate=0x7f05001c;
         public static final int guide_guide=0x7f050011;

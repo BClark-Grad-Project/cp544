@@ -33,5 +33,6 @@
     <string name="clear">Clear</string>
     <string name="you_enter">You Entered: </string>
     <string name="display">Display</string>
+    <string name="exit">Exit</string>
      
 </resources>
