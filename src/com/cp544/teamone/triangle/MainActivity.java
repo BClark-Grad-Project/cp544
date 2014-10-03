@@ -193,34 +193,46 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			return  a == b && b == c;
 		}
 		
-		public Boolean isScalene (double a, double b, double c){
+		public Boolean isIsosceles (double a, double b, double c){
 			return a == b || b == c || c == a;
 		}
 		
 		public int gameGenerateTriangle(TextView tView, ImageView iView, double a, double b, double c) {				
 			if (isLarge(a,b,c)) {
 				invalidInput(tView, iView, 0);
+				Log.d("test", "large");
 				return 0;
 			} else if (isShort(a,b,c)) {
+				Log.d("test", "small");
 				invalidInput(tView, iView, 1);
 				return 1;
 			} else if (notTriangle(a,b,c)) {
+				Log.d("test", "not triangle");
 				invalidInput(tView, iView, 3);
 				return 2;
 			} else if (isEqualateral(a,b,c)) {
+				Log.d("test", "equal sides");
 				viewEquilateral(tView, iView);
 				return 3;
-			} else if (isScalene(a,b,c)) {
-				viewScalene(tView, iView);
+			} else if (isIsosceles(a,b,c)) {
+				Log.d("test", "2 sides same");
+				viewIsosceles(tView, iView);
 				return 4;
 			} else {
-				viewIsosceles(tView, iView);
+				Log.d("test", "no sides same");
+				viewScalene(tView, iView);
 				return 5;
 			}
 		}
 		
 		public void gameLogic(TextView tView, ImageView iView, EditText eText1, EditText eText2, EditText eText3){				
 			// convert text to int
+			if (eText1.getText().length() == 0 || 
+					eText2.getText().length() == 0 || 
+					eText3.getText().length() == 0){
+				invalidInput(tView, iView, 2);				
+				return;				
+			}
 			bottomLength = Double.parseDouble(eText1.getText().toString());
 			leftLength = Double.parseDouble(eText2.getText().toString());
 			rightLength = Double.parseDouble(eText3.getText().toString());
