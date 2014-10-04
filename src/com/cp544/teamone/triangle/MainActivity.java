@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -140,13 +141,27 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		TextView disaplyTriangleName, labelResults;
 		ImageView displayTriangleImage;
 		
+		LinearLayout disaplyTriangleSides;
+		TextView valueLeft;
+		TextView valueBottom;
+		TextView valueRight;
+		
 		public void invalidInput(TextView tView, ImageView iView, int type) {
+			clearFields();
 			if (type == 0) tView.setText("Error:Please try again, remember your number must be less than " + maxVal + ".");
 			if (type == 1) tView.setText("Error:Please try again, value must be more than " + minVal + ".");
 			if (type == 2) tView.setText("Error:Please try again, missing input field.");
 			if (type == 3) tView.setText("Error:Please try again, this doesn't equal a triangle.");
 			iView.setImageResource(android.R.color.transparent);
 			//Log.d("Triangle Generate", "Clear fields. Sucess!");
+		}
+		
+		public void displaySides(double a, double b, double c) {
+			valueLeft.setText(Double.toString(a));
+			valueBottom.setText(Double.toString(b));
+			valueRight.setText(Double.toString(c));			
+			disaplyTriangleSides.setVisibility(LinearLayout.VISIBLE);
+			
 		}
 		
 		public void viewIsosceles(TextView tView, ImageView iView){
@@ -167,14 +182,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			//Log.d("Triangle Generate", "View Scalene. Sucess!");
 		}
 		
-		public void clearFields(View v){
-			if (v.getId() == R.id.button2) {
+		public void clearFields(){
 				inputBottom.setText("");
 				inputLeft.setText("");
 				inputRight.setText("");
 				disaplyTriangleName.setText("");
 				displayTriangleImage.setImageResource(android.R.color.transparent);
-			}
+				disaplyTriangleSides.setVisibility(LinearLayout.GONE);
 		}
 		
 	    public boolean isLarge(double a, double b, double c) {
@@ -199,27 +213,27 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		
 		public int gameGenerateTriangle(TextView tView, ImageView iView, double a, double b, double c) {				
 			if (isLarge(a,b,c)) {
+				displaySides(a,b,c);
 				invalidInput(tView, iView, 0);
-				Log.d("test", "large");
 				return 0;
 			} else if (isShort(a,b,c)) {
-				Log.d("test", "small");
+				displaySides(a,b,c);
 				invalidInput(tView, iView, 1);
 				return 1;
 			} else if (notTriangle(a,b,c)) {
-				Log.d("test", "not triangle");
+				displaySides(a,b,c);
 				invalidInput(tView, iView, 3);
 				return 2;
 			} else if (isEqualateral(a,b,c)) {
-				Log.d("test", "equal sides");
+				displaySides(a,b,c);
 				viewEquilateral(tView, iView);
 				return 3;
 			} else if (isIsosceles(a,b,c)) {
-				Log.d("test", "2 sides same");
+				displaySides(a,b,c);
 				viewIsosceles(tView, iView);
 				return 4;
 			} else {
-				Log.d("test", "no sides same");
+				displaySides(a,b,c);
 				viewScalene(tView, iView);
 				return 5;
 			}
@@ -247,11 +261,15 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			inputBottom = (EditText) findViewById(R.id.editText1);
 			inputLeft = (EditText) findViewById(R.id.editText2);
 			inputRight = (EditText) findViewById(R.id.editText3);
-			disaplyTriangleName = (TextView) findViewById(R.id.textView6);
-			labelResults = (TextView) findViewById(R.id.textView5);
 			btnGenerate = (Button) findViewById(R.id.button1);
 			btnClear = (Button) findViewById(R.id.button2);
+			
+			disaplyTriangleName = (TextView) findViewById(R.id.textView6);
 			displayTriangleImage = (ImageView) findViewById(R.id.display);
+			disaplyTriangleSides = (LinearLayout) findViewById(R.id.enteredValues);
+			valueLeft = (TextView) findViewById(R.id.valueLeft);
+			valueBottom = (TextView) findViewById(R.id.valueBottom);
+			valueRight = (TextView) findViewById(R.id.valueRight);
 
 			// setting up Gen button
 			btnGenerate.setOnClickListener(new View.OnClickListener() {
@@ -266,7 +284,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			btnClear.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					clearFields(v);
+					clearFields();
 				}
 			});
 		}

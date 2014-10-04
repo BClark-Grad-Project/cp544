@@ -14,9 +14,9 @@
     <string name="t_tri">Types Of Triangles</string>
     <string name="enter_text">Please enter three sides of the triangle below (whole number only): </string>
     <string name="editText1">Value One</string>
-    <string name="side_1">Bottom Side: </string>
-    <string name="side_2">Left Side:</string>
-    <string name="side_3">Right Side: </string>
+    <string name="side_1">Bottom Side </string>
+    <string name="side_2">Left Side</string>
+    <string name="side_3">Right Side </string>
     <string name="title_activity_guide">Guide</string>
     <string name="guide_guide">Tri angle Types:</string>
     <string name="title_activity_game">Game</string>
