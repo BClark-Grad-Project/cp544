@@ -200,7 +200,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	    }
 
 	    public boolean notTriangle(double a, double b, double c) {
-	        return a > b + c || b > a + c || c > a + b;
+	        return a >= b + c || b >= a + c || c >= a + b;
 	    }
 	    
 		public Boolean isEqualateral (double a, double b, double c){
